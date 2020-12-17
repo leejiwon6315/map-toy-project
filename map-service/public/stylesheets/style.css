@@ -29,3 +29,36 @@ body {
 
   border-radius: 50%;
 }
+
+.infoWindow_wrap {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  padding: 10px 15px 10px 15px;
+  margin-bottom: 2px;
+  border-style: none;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.infoWindow_wrap > .infoWindow_header {
+  display: flex;
+  flex-direction: row;
+}
+
+.infoWindow_title {
+  font-size: 11px;
+  font-weight: 400;
+  padding-right: 5px;
+}
+
+.infoWindow_content {
+  font-size: 11px;
+  font-weight: 300;
+}
+.infoWindow_date {
+  font-size: 11px;
+  font-weight: 200;
+}

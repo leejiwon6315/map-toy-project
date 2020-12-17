@@ -11,13 +11,14 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script
       type="text/javascript"
-      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=///myid////"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=mskiadqo0b"
     ></script>
   </head>
   <body>
     <div id="nav">Map-toy-project</div>
     <div id="map" style="width: 100%; height: 100vh"></div>
 
+    <script type="text/javascript" src="/data/data.js"></script>
     <script>
       const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
@@ -25,14 +26,63 @@
       };
 
       const map = new naver.maps.Map("map", mapOptions);
+      const markerList = [];
+      const infoWindowList = [];
 
-      marker = new naver.maps.Marker({
-        map: map,
-        position: new naver.maps.LatLng(37.3595704, 127.105399),
-        icon: {
-          content: "<div class='marker'></div>",
-        },
-      });
+      for (let i in data) {
+        const target = data[i];
+        const latlng = new naver.maps.LatLng(target.lat, target.lng);
+
+        marker = new naver.maps.Marker({
+          map: map,
+          position: latlng,
+          icon: {
+            content: "<div class = 'marker'></div>",
+            anchor: new naver.maps.Point(12, 12),
+          },
+        });
+
+        const content = `<div class='infoWindow_wrap'>
+            <div class='infoWindow_header'>
+              <div class='infoWindow_title'>${target.title}</div>
+              <div class='infoWindow_content'>${target.content}</div>
+            </div>
+            
+            <div class='infoWindow_date'>${target.date}</div>
+          </div>`;
+
+        const infoWindow = new naver.maps.InfoWindow({
+          content: content,
+          backgroundColor: "#00ff0000",
+          borderColor: "#00ff0000",
+          anchorSize: new naver.maps.Size(10, 10),
+          anchorColor: "rgba(0,0,0,0.5)",
+        });
+
+        markerList.push(marker);
+        infoWindowList.push(infoWindow);
+      }
+
+      getClickHandler = (i) => {
+        return () => {
+          const marker = markerList[i];
+          const infoWindow = infoWindowList[i];
+
+          if (infoWindow.getMap()) {
+            infoWindow.close();
+          } else {
+            infoWindow.open(map, marker);
+          }
+        };
+      };
+
+      for (var i = 0, ii = markerList.length; i < ii; i++) {
+        naver.maps.Event.addListener(
+          markerList[i],
+          "click",
+          getClickHandler(i)
+        );
+      }
     </script>
   </body>
 </html>
