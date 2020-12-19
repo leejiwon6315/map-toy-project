@@ -11,13 +11,13 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script
       type="text/javascript"
-      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=mskiadqo0b"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=//My API ID//"
     ></script>
   </head>
+
   <body>
     <div id="nav">Map-toy-project</div>
     <div id="current">현재 위치</div>
-
     <div id="map" style="width: 100%; height: 100vh"></div>
 
     <script type="text/javascript" src="/data/data.js"></script>
@@ -30,6 +30,7 @@
       const markerList = [];
       const infoWindowList = [];
       const currentPosition = document.getElementById("current");
+      let currentUse = true;
 
       for (let i in data) {
         const target = data[i];
@@ -49,7 +50,7 @@
               <div class='infoWindow_title'>${target.title}</div>
               <div class='infoWindow_content'>${target.content}</div>
             </div>
-            
+
             <div class='infoWindow_date'>${target.date}</div>
           </div>`;
 
@@ -86,7 +87,31 @@
       };
 
       handlePosition = () => {
-        alert("이벤트 클릭");
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const latlng = new naver.maps.LatLng(lat, lng);
+
+            if (currentUse) {
+              marker = new naver.maps.Marker({
+                map: map,
+                position: latlng,
+                icon: {
+                  content:
+                    '<div class="pulse" draggable="false" unselectable="on"></div>',
+
+                  anchor: new naver.maps.Point(11, 11),
+                },
+              });
+              currentUse = false;
+            }
+            map.setZoom(13, false);
+            map.panTo(latlng);
+          });
+        } else {
+          alert("위치정보 사용 불가능");
+        }
       };
 
       currentPosition.addEventListener("click", handlePosition);
