@@ -16,6 +16,8 @@
   </head>
   <body>
     <div id="nav">Map-toy-project</div>
+    <div id="current">현재 위치</div>
+
     <div id="map" style="width: 100%; height: 100vh"></div>
 
     <script type="text/javascript" src="/data/data.js"></script>
@@ -24,10 +26,10 @@
         center: new naver.maps.LatLng(37.3595704, 127.105399),
         zoom: 10,
       };
-
       const map = new naver.maps.Map("map", mapOptions);
       const markerList = [];
       const infoWindowList = [];
+      const currentPosition = document.getElementById("current");
 
       for (let i in data) {
         const target = data[i];
@@ -82,6 +84,12 @@
           infoWindow.close();
         };
       };
+
+      handlePosition = () => {
+        alert("이벤트 클릭");
+      };
+
+      currentPosition.addEventListener("click", handlePosition);
 
       for (var i = 0, ii = markerList.length; i < ii; i++) {
         naver.maps.Event.addListener(
