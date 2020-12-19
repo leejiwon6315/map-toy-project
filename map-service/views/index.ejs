@@ -76,12 +76,21 @@
         };
       };
 
+      clickMap = (i) => {
+        return () => {
+          const infoWindow = infoWindowList[i];
+          infoWindow.close();
+        };
+      };
+
       for (var i = 0, ii = markerList.length; i < ii; i++) {
         naver.maps.Event.addListener(
           markerList[i],
           "click",
           getClickHandler(i)
         );
+
+        naver.maps.Event.addListener(map, "click", clickMap(i));
       }
     </script>
   </body>
