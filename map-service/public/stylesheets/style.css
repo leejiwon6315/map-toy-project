@@ -34,8 +34,63 @@ body {
   text-align: center;
   cursor: pointer;
 
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
+}
+
+#search {
+  width: fit-content;
+  position: absolute;
+  top: 150px;
+  left: 20px;
+  z-index: 100;
+
+  padding: 15px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.253);
+}
+
+#search > #search_input {
+  width: 150px;
+
+  margin-right: 7px;
+  padding-bottom: 5px;
+  border: none;
+  border-bottom: 1px solid rgb(32, 41, 160);
+}
+
+#search > #search_input:focus {
+  outline: none;
+}
+
+#search > #search_input:focus::placeholder {
+  color: transparent;
+}
+
+#search > #search_button {
+  width: 40px;
+
+  padding: 6px;
+  background-color: rgb(32, 41, 160);
+  border: none;
+  border-radius: 2px;
+
+  color: white;
+  font-size: 13px;
+  font-weight: 300;
+}
+
+#search > #search_button:hover {
+  background-color: rgb(90, 97, 207);
+}
+
+#search > #search_button:active {
+  background-color: rgb(32, 41, 160);
+}
+
+#search > #search_button:focus {
+  outline: none;
 }
 
 .marker {

@@ -11,13 +11,25 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script
       type="text/javascript"
-      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=//My API ID//"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=//MY API ID//"
+    ></script>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=//MY API ID//&libraries=services"
     ></script>
   </head>
 
   <body>
     <div id="nav">Map-toy-project</div>
-    <div id="current">현재 위치</div>
+    <div id="search">
+      <input
+        type="search"
+        id="search_input"
+        placeholder="목적지를 입력해 주세요"
+      />
+      <button id="search_button">찾기</button>
+    </div>
+    <div id="current">현재위치 찾기</div>
     <div id="map" style="width: 100%; height: 100vh"></div>
 
     <script type="text/javascript" src="/data/data.js"></script>
@@ -27,10 +39,14 @@
         zoom: 10,
       };
       const map = new naver.maps.Map("map", mapOptions);
+      const ps = new kakao.maps.services.Places();
       const markerList = [];
       const infoWindowList = [];
       const currentPosition = document.getElementById("current");
+      const searchInput = document.getElementById("search_input");
+      const searchButton = document.getElementById("search_button");
       let currentUse = true;
+      let searchErr = [];
 
       for (let i in data) {
         const target = data[i];
@@ -86,7 +102,13 @@
         };
       };
 
-      handlePosition = () => {
+      changeColor = () => {
+        currentPosition.style.backgroundColor = `rgb(${32}, ${41}, ${160})`;
+        currentPosition.innerText = "현재위치 표시중";
+        currentPosition.style.color = "white";
+      };
+
+      handleCurrentPosition = () => {
         if ("geolocation" in navigator) {
           navigator.geolocation.getCurrentPosition((position) => {
             const lat = position.coords.latitude;
@@ -108,13 +130,57 @@
             }
             map.setZoom(13, false);
             map.panTo(latlng);
+
+            changeColor();
           });
         } else {
           alert("위치정보 사용 불가능");
         }
       };
 
-      currentPosition.addEventListener("click", handlePosition);
+      placeSearchCB = (data, status, pagination) => {
+        if (status === kakao.maps.services.Status.OK) {
+          const target = data[0];
+          const lat = target.y;
+          const lng = target.x;
+          const latlng = new naver.maps.LatLng(lat, lng);
+
+          marker = new naver.maps.Marker({
+            position: latlng,
+            map: map,
+          });
+
+          if (searchErr.length == 0) {
+            searchErr.push(marker);
+          } else {
+            searchErr.push(marker);
+
+            const preMarker = searchErr.splice(0, 1);
+            preMarker[0].setMap(null);
+          }
+
+          map.setZoom(13, false);
+          map.panTo(latlng);
+        } else {
+          alert("검색 결과가 없습니다");
+        }
+      };
+
+      srchKeywordEnter = (e) => {
+        if (e.keyCode == 13) {
+          const content = searchInput.value;
+          ps.keywordSearch(content, placeSearchCB);
+        }
+      };
+
+      srchKeywordButton = () => {
+        const content = searchInput.value;
+        ps.keywordSearch(content, placeSearchCB);
+      };
+
+      currentPosition.addEventListener("click", handleCurrentPosition);
+      searchInput.addEventListener("keydown", srchKeywordEnter);
+      searchButton.addEventListener("click", srchKeywordButton);
 
       for (var i = 0, ii = markerList.length; i < ii; i++) {
         naver.maps.Event.addListener(
