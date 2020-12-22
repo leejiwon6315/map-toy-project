@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script
       type="text/javascript"
-      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=//MY API ID//"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=mskiadqo0b"
     ></script>
     <script
       type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=//MY API ID//&libraries=services"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b0a704b139a29dc9f52e2a8e272a8659&libraries=services"
     ></script>
   </head>
 
@@ -30,23 +30,34 @@
       <button id="search_button">찾기</button>
     </div>
     <div id="current">현재위치 찾기</div>
+    <div id="clock">
+      <h1></h1>
+    </div>
+
     <div id="map" style="width: 100%; height: 100vh"></div>
 
     <script type="text/javascript" src="/data/data.js"></script>
     <script>
       const mapOptions = {
         center: new naver.maps.LatLng(37.3595704, 127.105399),
-        zoom: 10,
+        zoom: 15,
+        zoomControl: true,
+        zoomControlOptions: {
+          position: naver.maps.Position.TOP_RIGHT,
+          legendDisabled: false,
+        },
       };
       const map = new naver.maps.Map("map", mapOptions);
       const ps = new kakao.maps.services.Places();
-      const markerList = [];
-      const infoWindowList = [];
       const currentPosition = document.getElementById("current");
       const searchInput = document.getElementById("search_input");
       const searchButton = document.getElementById("search_button");
+      const clockContainer = document.getElementById("clock");
+      const clockText = clockContainer.querySelector("h1");
+      const markerList = [];
+      const infoWindowList = [];
+      const searchErr = [];
       let currentUse = true;
-      let searchErr = [];
 
       for (let i in data) {
         const target = data[i];
@@ -128,7 +139,7 @@
               });
               currentUse = false;
             }
-            map.setZoom(13, false);
+            map.setZoom(15, false);
             map.panTo(latlng);
 
             changeColor();
@@ -159,7 +170,7 @@
             preMarker[0].setMap(null);
           }
 
-          map.setZoom(13, false);
+          map.setZoom(15, false);
           map.panTo(latlng);
         } else {
           alert("검색 결과가 없습니다");
