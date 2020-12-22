@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script
       type="text/javascript"
-      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=mskiadqo0b"
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId= /// MY API ID /// "
     ></script>
     <script
       type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=b0a704b139a29dc9f52e2a8e272a8659&libraries=services"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey= /// MY API ID /// &libraries=services"
     ></script>
   </head>
 
@@ -189,9 +189,24 @@
         ps.keywordSearch(content, placeSearchCB);
       };
 
-      currentPosition.addEventListener("click", handleCurrentPosition);
-      searchInput.addEventListener("keydown", srchKeywordEnter);
-      searchButton.addEventListener("click", srchKeywordButton);
+      getTime = () => {
+        const date = new Date();
+        const month = date.getMonth();
+        const days = date.getDate();
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+
+        clockText.innerText = `${month + 1}월 ${days <= 9 ? `0${days}` : days}일
+        ${hours <= 9 ? `0${hours}` : hours} : ${
+          minutes <= 9 ? `0${minutes}` : minutes
+        } : ${seconds <= 9 ? `0${seconds}` : seconds}`;
+      };
+
+      showClock = () => {
+        getTime();
+        setInterval(getTime, 1000);
+      };
 
       for (var i = 0, ii = markerList.length; i < ii; i++) {
         naver.maps.Event.addListener(
@@ -202,6 +217,12 @@
 
         naver.maps.Event.addListener(map, "click", clickMap(i));
       }
+
+      currentPosition.addEventListener("click", handleCurrentPosition);
+      searchInput.addEventListener("keydown", srchKeywordEnter);
+      searchButton.addEventListener("click", srchKeywordButton);
+
+      showClock();
     </script>
   </body>
 </html>
