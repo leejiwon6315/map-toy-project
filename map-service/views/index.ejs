@@ -11,16 +11,16 @@
     <link rel="stylesheet" href="/stylesheets/style.css" />
     <script
       type="text/javascript"
-      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId= /// MY API ID /// "
+      src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=MYAPIID"
     ></script>
     <script
       type="text/javascript"
-      src="//dapi.kakao.com/v2/maps/sdk.js?appkey= /// MY API ID /// &libraries=services"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=MYAPIID&libraries=services"
     ></script>
   </head>
 
   <body>
-    <div id="nav">Map-toy-project</div>
+    <div id="nav">JEEWON'S MAP</div>
     <div id="search">
       <input
         type="search"
@@ -29,8 +29,9 @@
       />
       <button id="search_button">찾기</button>
     </div>
-    <div id="current">현재위치 찾기</div>
+    <div id="current">ME</div>
     <div id="clock">
+      <h2>현재시각</h2>
       <h1></h1>
     </div>
 
@@ -43,8 +44,12 @@
         zoom: 15,
         zoomControl: true,
         zoomControlOptions: {
-          position: naver.maps.Position.TOP_RIGHT,
+          position: naver.maps.Position.RIGHT_CENTER,
           legendDisabled: false,
+        },
+        logoControl: true,
+        logoControlOptions: {
+          position: naver.maps.Position.LEFT_BOTTOM,
         },
       };
       const map = new naver.maps.Map("map", mapOptions);
@@ -115,7 +120,6 @@
 
       changeColor = () => {
         currentPosition.style.backgroundColor = `rgb(${32}, ${41}, ${160})`;
-        currentPosition.innerText = "현재위치 표시중";
         currentPosition.style.color = "white";
       };
 
