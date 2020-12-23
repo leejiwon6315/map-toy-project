@@ -46,6 +46,7 @@ for (let i in data) {
         </div>
 
         <div class='infoWindow_date'>${target.date}</div>
+        <div class='infoWindow_date'>회복자 수 ${target.amount} 명</div>
       </div>`;
 
   const infoWindow = new naver.maps.InfoWindow({
